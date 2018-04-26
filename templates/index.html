@@ -8,8 +8,9 @@
     <!--Create the link for the article based on its ID-->
     <a href="/article/view/{{.ID}}">
       <!--Display the title of the article -->
-      <h2>{{.Title}}</h2>
+      <h3>{{.Title}}</h3>
     </a>
+    <h6>发布日期：{{.DateTime}}</h6>
     <!--Display the content of the article-->
     <p>{{.Content}}</p>
   {{end}}
