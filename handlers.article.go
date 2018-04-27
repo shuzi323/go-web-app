@@ -9,12 +9,26 @@ import (
 
 // 首页
 func showIndexPage(c *gin.Context) {
-	articles, err := getAllArticles()
+	var page Page
+	var err error
+	page.PageNow, err = strconv.Atoi(c.DefaultQuery("page", "1"))
+	if err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+	page.PageSize = 8
+	page.myPage()
+	if page.PageNow > page.TotalPage || page.PageNow <= 0 { //页面不存在
+		c.AbortWithStatus(http.StatusNotFound)
+	}
+	//articles, err := getAllArticles()  分页后用不到全部获取
+	var articles []Article
+	articles, err = page.getArticles()
 	if err != nil {
 		log.Fatalln(err)
 	}
 	render(c, gin.H{
 		"title":   "Home Page",
+		"page":    page,
 		"payload": articles}, "index.html")
 }
 
@@ -43,7 +57,10 @@ func showArticleCreationPage(c *gin.Context) {
 func createArticle(c *gin.Context) {
 	title := c.PostForm("title")
 	content := c.PostForm("content")
-	if a, err := createNewArticle(title, content); err == nil {
+	//获取用户ID
+	token, _ := c.Cookie("token")
+	userID, _ := getTokenUserID(token)
+	if a, err := createNewArticle(title, content, userID); err == nil {
 		render(c, gin.H{
 			"title":   "Submission Successful",
 			"payload": a}, "submission-successful.html")

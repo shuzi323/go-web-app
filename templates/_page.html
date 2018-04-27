@@ -1,0 +1,15 @@
+<ul class="pagination">
+	{{if .page.ShowFirstPage}}
+	<li><a href="?page=1">1</a></li>
+	{{if not (eq .page.PageNow 4)}}
+	<li><a>...</a></li>
+	{{end}}
+	{{end}}
+	{{range $index,$page := .page.ShowPages}}
+	<li {{if eq $.page.PageNow $page}} class="active" {{end}}><a href="/?page={{$page}}">{{$page}}</a></li>
+	{{end}}
+	{{if .page.ShowLastPage}}
+	<li><a>...</a></li>
+	<li><a href="?page={{.page.TotalPage}}">{{.page.TotalPage}}</a></li>
+	{{end}}
+</ul>

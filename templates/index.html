@@ -2,7 +2,6 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-
 <div class="container">
   {{range .payload }}
     <!--Create the link for the article based on its ID-->
@@ -10,10 +9,11 @@
       <!--Display the title of the article -->
       <h3>{{.Title}}</h3>
     </a>
-    <h6>发布日期：{{.DateTime}}</h6>
+    <p><small><var>作者：{{.UserName}}&nbsp;&nbsp;&nbsp;&nbsp;发布日期：{{.DateTime}}</var></small></p>
     <!--Display the content of the article-->
     <p>{{.Content}}</p>
   {{end}}
+  {{ template "_page.html" .}}
 </div>
 <!--Embed the footer.html template at this location-->
 {{ template "footer.html" .}}
